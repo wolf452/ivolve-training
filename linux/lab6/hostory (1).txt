@@ -1,0 +1,13 @@
+       sudo apt install ssh
+       sudo systemctl status ssh
+       sudo systemctl enable --now  ssh
+       sudo systemctl status ssh
+       ssh-keygen -t rsa -b 4096 -C "ivolve-key"
+     sudo ssh-copy-id -i /home/ahmed/.ssh/id_rsa.pub ahmed@192.168.216.136
+      sudo vim ~/.ssh/config 
+      ssh ivolve
+    
+      cat ~/.ssh/config 
+      vim  ~/.ssh/config 
+     history
+
