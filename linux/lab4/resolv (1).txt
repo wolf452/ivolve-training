@@ -1,0 +1,4 @@
+nameserver 192.168.216.136
+options edns0 trust-ad
+search localdomain
+
