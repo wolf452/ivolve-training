@@ -1,0 +1,5 @@
+root_password: root
+db_user: ivolve_user
+
+db_password: "ivolve"
+~
