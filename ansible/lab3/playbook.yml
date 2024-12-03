@@ -1,0 +1,61 @@
+- name: Install MySQL and Configure Database
+  hosts: sql
+  become: true
+  vars_files:
+    - vars/vault.yml
+
+  tasks:
+    # Step 1: Update package cache and install MySQL server
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL server
+      apt:
+        name: mysql-server
+        state: present
+
+    # Step 2: Install Python dependencies for MySQL
+    - name: Install Python MySQL dependencies
+      apt:
+        name: python3-pymysql
+        state: present
+
+    # Step 3: Set up root password (if not already set)
+    - name: Set MySQL root password
+      shell: |
+        mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY '{{ root_password }}'; FLUSH PRIVILEGES;"
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+
+    # Step 4: Create MySQL root configuration file
+    - name: Create MySQL root configuration file
+      copy:
+        dest: /root/.my.cnf
+        content: |
+          [client]
+          user=root
+          password={{ root_password }}
+        mode: '0600'
+
+    # Step 5: Create ivolve database
+    - name: Create ivolve database
+      mysql_db:
+        name: ivolve
+        state: present
+
+    # Step 6: Create a user and grant privileges
+    - name: Create a MySQL user and grant privileges
+      mysql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        priv: "ivolve.*:ALL"
+        state: present
+
+    # Step 7: Restart MySQL service
+    - name: Restart MySQL service
+      service:
+        name: mysql
+        state: restarted
+
