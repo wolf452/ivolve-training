@@ -1,0 +1,9 @@
+[default]
+inventory = ~/Downloads/lab2/inventory
+remote_user = ec2-user
+private_key_file= ~/Downloads/lab2/ahmed.pem
+
+
+
+[Privilege_escalatioin]
+become = true

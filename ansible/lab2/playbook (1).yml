@@ -1,0 +1,29 @@
+---
+- name: Install nginx and manage service
+  hosts: web
+  become: true
+  tasks:
+    - name: Install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Ensure nginx is running and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Create a sample HTML file
+      copy:
+        dest: /usr/share/nginx/html/index.html  # Path where nginx serves its HTML files
+        content: |
+          <html>
+            <head>
+              <title>Welcome to ahmed</title> <!-- Title of the page in the browser tab -->
+            </head>
+            <body>
+              <h1>It works!</h1> <!-- Main heading text displayed on the webpage -->
+            </body>
+          </html>
+
