@@ -16,7 +16,7 @@
 
     - name: Create a sample HTML file
       copy:
-        dest: /usr/share/nginx/html/index.html  # Path where nginx serves its HTML files
+        dest: /usr/share/nginx/html/index.html  
         content: |
           <html>
             <head>
