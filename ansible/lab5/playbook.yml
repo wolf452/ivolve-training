@@ -1,0 +1,6 @@
+---
+- name: Install Apache on Dynamic Inventory Hosts
+  hosts: tag_ivolve
+  become: yes
+  roles:
+    - geerlingguy.apache
