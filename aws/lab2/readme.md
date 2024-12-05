@@ -1,5 +1,6 @@
 
-# **Lab 13: Launching an EC2 Instance**
+# **Lab 13: Launching an EC2 Instance&Use a bastion host (public EC2) to SSH into the private EC2 instance.
+**
 
 ## **Objective**
 - Create a VPC with both public and private subnets.
