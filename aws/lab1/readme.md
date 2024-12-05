@@ -1,5 +1,5 @@
 
-# **AWS Setup Guide**
+# **Setup AWS Account with IAM Groups, Users, and Billing Alarm**
 
 This guide provides detailed steps to create an AWS account, configure billing alarms, set up IAM groups and users, and verify access permissions.
 
