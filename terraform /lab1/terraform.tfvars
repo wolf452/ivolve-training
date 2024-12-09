@@ -1,0 +1,7 @@
+region                = "us-east-1"
+environment           = "production"
+public_subnet_cidr    = "10.0.1.0/24"
+private_subnet_cidr   = "10.0.2.0/24"
+instance_type         = "t2.micro"
+db_instance_class     = "db.t2.micro"
+db_password           = "your-secure-db-password"
