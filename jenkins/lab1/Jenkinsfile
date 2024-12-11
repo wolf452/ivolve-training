@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // Pull the code from the GitHub repository
                 git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                git url: 'https://github.com/wolf8534/ivolve-/tree/main/jenkins/lab1', branch: 'main'
+                git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
             }
         }
         stage('Build Docker Image') {
@@ -44,8 +44,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                    // Apply the updated deployment.yaml to Kubernetes
-                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        // Apply the updated deployment.yaml to Kubernetes
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                    }
                 }
             }
         }
