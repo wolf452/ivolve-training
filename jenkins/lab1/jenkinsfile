@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
+        KUBE_NAMESPACE = 'default'  // يمكنك تخصيصه حسب الـ Namespace في الـ Kubernetes
+        DEPLOYMENT_YAML = 'deployment.yaml'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull the code from the GitHub repository
+                git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
+                git url: 'https://github.com/wolf8534/ivolve-/tree/main/jenkins/lab1', branch: 'main'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image from Dockerfile
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // Push the Docker image to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                        sh 'docker push $DOCKER_IMAGE'
+                    }
+                }
+            }
+        }
+        stage('Edit Deployment.yaml') {
+            steps {
+                script {
+                    // Use sed to replace the image name in the deployment.yaml file
+                    sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
+                    // Apply the updated deployment.yaml to Kubernetes
+                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                }
+            }
+        }
+        stage('Post Action') {
+            steps {
+                script {
+                    // Perform any post deployment action (like notifications, tests, etc.)
+                    echo "Deployment to Kubernetes completed successfully!"
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo "Pipeline executed successfully."
+        }
+        failure {
+            echo "Pipeline failed."
+        }
+    }
+}
