@@ -36,12 +36,24 @@ pipeline {
                 }
             }
         }
-        
+
+        // Install kubectl
+        stage('Install kubectl') {
+            steps {
+                script {
+                    sh """
+                        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+                        chmod +x kubectl
+                        mv kubectl /usr/local/bin/
+                    """
+                }
+            }
+        }
+
         // Edit the deployment.yaml file to replace the old image with the new one
         stage('Edit Deployment.yaml') {
             steps {
                 script {
-                
                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
@@ -69,7 +81,7 @@ pipeline {
                 }
             }
         }
-        
+
         // Post action (e.g., notifications, additional tasks)
         stage('Post Action') {
             steps {
@@ -79,7 +91,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo "Pipeline executed successfully."
