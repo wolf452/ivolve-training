@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
         KUBE_NAMESPACE = 'default'  // You can customize the Kubernetes Namespace
-        DEPLOYMENT_YAML = './jenkins/lab1/deployment.yaml'
+        DEPLOYMENT_YAML = 'jenkins/lab1/deployment.yaml'
     }
     stages {
         // Checkout code from GitHub repositories
