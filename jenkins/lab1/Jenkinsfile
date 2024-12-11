@@ -65,7 +65,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'K8S_USERNAME', passwordVariable: 'K8S_PASSWORD')]) {
                         
-                         sh   'echo "${K8S_PASSWORD}" | kubectl login --username=${K8S_USERNAME} --password-stdin
+                         sh   'echo "${K8S_PASSWORD}" | kubectl login --username=${K8S_USERNAME} --password-stdin'
                          sh   'kubectl config use-context kind-kind'
                         
                     }
