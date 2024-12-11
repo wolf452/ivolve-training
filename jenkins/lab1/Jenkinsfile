@@ -20,9 +20,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh """
-                        docker build -t ${DOCKER_IMAGE} .
-                    """
+                     sh   'docker build -t ${DOCKER_IMAGE} .'
                 }
             }
         }
@@ -32,10 +30,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh """
-                            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-                            docker push ${DOCKER_IMAGE}
-                        """
+                        
+                         sh   'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
+                         sh   'docker push ${DOCKER_IMAGE}'
+                        
                     }
                 }
             }
@@ -45,11 +43,9 @@ pipeline {
         stage('Install kubectl') {
             steps {
                 script {
-                    sh """
-                        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-                        chmod +x kubectl
-                        mv kubectl /usr/local/bin/
-                    """
+                      sh  'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'        
+                      sh  'chmod +x kubectl'
+                      sh  'mv kubectl /usr/local/bin/'
                 }
             }
         }
@@ -68,10 +64,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'K8S_USERNAME', passwordVariable: 'K8S_PASSWORD')]) {
-                        sh """
-                            echo "${K8S_PASSWORD}" | kubectl login --username=${K8S_USERNAME} --password-stdin
-                            kubectl config use-context kind-kind
-                        """
+                        
+                         sh   'echo "${K8S_PASSWORD}" | kubectl login --username=${K8S_USERNAME} --password-stdin
+                         sh   'kubectl config use-context kind-kind'
+                        
                     }
                 }
             }
