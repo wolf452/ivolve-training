@@ -8,15 +8,23 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Pull the code from the GitHub repository
-                git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                git url: 'https://github.com/wolf8534/ivolve-/tree/main/jenkins/lab1', branch: 'main'
+                script {
+                    // جلب الكود من Git مع تفعيل sparse-checkout لاختيار المجلد
+                    sh '''
+                  
+                    git clone --branch main https://github.com/IbrahimAdell/Lab.git
+                    git clone --branch main https://github.com/wolf8534/ivolve-.git
+                    cd jenkins/Lab1                
+                    git sparse-checkout init --cone
+                    git sparse-checkout set jenkins/lab1
+                    '''
+                }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from Dockerfile
+                    
                     sh 'docker build -t $DOCKER_IMAGE .'
                 }
             }
@@ -24,7 +32,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Push the Docker image to Docker Hub
+                  
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                         sh 'docker push $DOCKER_IMAGE'
@@ -35,7 +43,7 @@ pipeline {
         stage('Edit Deployment.yaml') {
             steps {
                 script {
-                    // Use sed to replace the image name in the deployment.yaml file
+                   
                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
@@ -44,15 +52,16 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                    // Apply the updated deployment.yaml to Kubernetes
-                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                    }
                 }
             }
         }
         stage('Post Action') {
             steps {
                 script {
-                    // Perform any post deployment action (like notifications, tests, etc.)
+                    
                     echo "Deployment to Kubernetes completed successfully!"
                 }
             }
