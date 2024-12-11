@@ -9,10 +9,7 @@ pipeline {
         // Checkout code from GitHub repositories
         stage('Checkout') {
             steps {
-                // Checkout the first GitHub repository
                 git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                
-                // Checkout the second GitHub repository and navigate to the specific directory
                 dir('./jenkins/lab1') {
                     git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
                 }
@@ -28,7 +25,7 @@ pipeline {
             }
         }
         
-        // Push the Docker image to Docker Hub
+        // Push Docker image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
@@ -48,14 +45,26 @@ pipeline {
                 }
             }
         }
-        
-        // Deploy the application to Kubernetes
+
+        // Login to Kubernetes Cluster
+        stage('Login to Kubernetes') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'K8S_USERNAME', passwordVariable: 'K8S_PASSWORD')]) {
+                        sh """
+                            echo "$K8S_PASSWORD" | kubectl login --username=$K8S_USERNAME --password-stdin
+                            kubectl config use-context kind-kind
+                        """
+                    }
+                }
+            }
+        }
+
+        // Deploy to Kubernetes
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
-                    }
+                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                 }
             }
         }
