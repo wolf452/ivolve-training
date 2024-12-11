@@ -12,8 +12,8 @@ pipeline {
                     // استنساخ المستودعات مع تفعيل sparse-checkout
                     sh '''
                     git clone --branch main https://github.com/IbrahimAdell/Lab.git
-                    git clone --branch main https://github.com/wolf8534/ivolve-.git
-                    cd jenkins
+                    git clone --branch main/jenkins/lab1 https://github.com/wolf8534/ivolve-.git
+                    cd jenkins/lab1/
                     git sparse-checkout init --cone
                     git sparse-checkout set jenkins/Lab1
                     '''
