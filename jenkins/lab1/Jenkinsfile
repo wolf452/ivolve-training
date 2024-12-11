@@ -41,6 +41,7 @@ pipeline {
         stage('Edit Deployment.yaml') {
             steps {
                 script {
+                    sh 'cd ./jenkins/lab1/'
                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
