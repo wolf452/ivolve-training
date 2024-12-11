@@ -31,7 +31,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                        sh 'docker push $DOCKER_IMAGE'
+                        sh 'docker push docker.io/ahmedmaher07/ivolve'
                     }
                 }
             }
