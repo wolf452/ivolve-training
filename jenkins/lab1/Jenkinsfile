@@ -2,29 +2,36 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
-        KUBE_NAMESPACE = 'default'  // يمكنك تخصيصه حسب الـ Namespace في الـ Kubernetes
+        KUBE_NAMESPACE = 'default'  // You can customize the Kubernetes Namespace
         DEPLOYMENT_YAML = 'deployment.yaml'
     }
     stages {
+        // Checkout code from GitHub repositories
         stage('Checkout') {
             steps {
-                // Pull the code from the GitHub repository
+                // Checkout the first GitHub repository
                 git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
+                
+                // Checkout the second GitHub repository and navigate to the specific directory
+                dir('./jenkins/lab1') {
+                    git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
+                }
             }
         }
+        
+        // Build Docker image from Dockerfile
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from Dockerfile
                     sh 'docker build -t $DOCKER_IMAGE .'
                 }
             }
         }
+        
+        // Push the Docker image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Push the Docker image to Docker Hub
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                         sh 'docker push $DOCKER_IMAGE'
@@ -32,33 +39,37 @@ pipeline {
                 }
             }
         }
+        
+        // Edit the deployment.yaml file to replace the old image with the new one
         stage('Edit Deployment.yaml') {
             steps {
                 script {
-                    // Use sed to replace the image name in the deployment.yaml file
                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
         }
+        
+        // Deploy the application to Kubernetes
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                        // Apply the updated deployment.yaml to Kubernetes
                         sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
         }
+        
+        // Post action (e.g., notifications, additional tasks)
         stage('Post Action') {
             steps {
                 script {
-                    // Perform any post deployment action (like notifications, tests, etc.)
                     echo "Deployment to Kubernetes completed successfully!"
                 }
             }
         }
     }
+    
     post {
         success {
             echo "Pipeline executed successfully."
