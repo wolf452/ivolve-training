@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // Pull the code from the GitHub repository
                 git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                git url: 'https://github.com/wolf8534/ivolve-/tree/main/jenkins/lab1', branch: 'main'
+                git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
             }
         }
         stage('Build Docker Image') {
