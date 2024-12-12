@@ -44,11 +44,9 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'K8S_USERNAME', passwordVariable: 'K8S_PASSWORD')]) {
-                        
-                         sh   'echo "${K8S_PASSWORD}" | kubectl login --username=${K8S_USERNAME} --password-stdin'
-                         sh   'kubectl config use-context kind-kind'
-                        
+                    withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
+                        sh 'echo "${K8S_TOKEN}" | kubectl login --token=${K8S_TOKEN} --server=https://127.0.0.1:45907'
+                        sh 'kubectl config use-context kind-kind'
                     }
                 }
             }
