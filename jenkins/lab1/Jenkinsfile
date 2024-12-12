@@ -39,15 +39,7 @@ pipeline {
             }
         }
 
-        // Edit the deployment.yaml file to replace the old image with the new one
-        stage('Edit Deployment.yaml') {
-            steps {
-                script {
-                    sh "sed -i 's|image:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_YAML}"
-                }
-            }
-        }
-
+        
         // Login to Kubernetes Cluster
         stage('Login to Kubernetes') {
             steps {
