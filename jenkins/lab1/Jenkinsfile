@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                dir('./jenkins/lab1') {
+                dir('jenkins/lab1') {
                     git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
                 }
             }
