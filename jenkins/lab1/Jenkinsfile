@@ -55,8 +55,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
-                        // تأكد من أن KUBECONFIG يشير إلى kubeconfig الصحيح
-                        sh "kubectl --kubeconfig=$KUBECONFIG apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                         sh 'export KUBECONFIG=$KUBECONFIG'
+                        sh "kubectl  apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
