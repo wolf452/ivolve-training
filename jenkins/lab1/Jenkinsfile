@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // تأكد من أنك في المسار الصحيح للـ Dockerfile
-                  //  sh 'docker build -t $DOCKER_IMAGE .'  
+                    // sh 'docker build -t $DOCKER_IMAGE .'  
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                      //  sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
+                        // sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
                         // Uncomment the following line to push the image
                         // sh 'docker push ${DOCKER_IMAGE}'  
                     }
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     // استخدام sed لتحديث اسم الصورة في ملف deployment.yaml
-                   // sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
+                    // sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
         }
@@ -54,10 +54,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Use KUBECONFIG credentials
                     withCredentials([file(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
-                         sh ' kubectl config set-credentials jenkins --token=$KUBECONFIG'
-                         sh 'export KUBECONFIG=$KUBECONFIG'
-                        sh "kubectl  apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        // Make sure KUBECONFIG points to the correct kubeconfig file
+                        sh 'export KUBECONFIG=$KUBECONFIG'
+                        sh 'kubectl config set-credentials jenkins --token=$KUBECONFIG'
+                        // Apply the deployment
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
