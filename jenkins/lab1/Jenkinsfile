@@ -53,8 +53,13 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8s_token']) {
-                        // تطبيق التغييرات على Kubernetes باستخدام kubectl
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        // تأكد من أن Jenkins يملك الأذونات اللازمة للوصول إلى Kubernetes
+                        sh """
+                            kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE \
+                            --client-cert=/home/ahmed/.minikube/profiles/minikube/client.crt \
+                            --client-key=/home/ahmed/.minikube/profiles/minikube/client.key \
+                            --certificate-authority=/home/ahmed/.minikube/ca.crt
+                        """
                     }
                 }
             }
