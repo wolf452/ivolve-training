@@ -41,15 +41,7 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
-                        // Set the credentials with the Kubernetes token
-                        sh 'kubectl config set-credentials jenkins --token=${K8S_TOKEN}' 
-
-                        // Set the context (adjust the cluster name if necessary)
-                        sh 'kubectl config set-context my-context --user=jenkins --cluster=kind-kind'  
-
-                        // Use the context
-                        sh 'kubectl config use-context my-context && kubectl apply -f ${DEPLOYMENT_YAML} -n ${KUBE_NAMESPACE}'
+                      kubectl apply -f ${DEPLOYMENT_YAML} -n ${KUBE_NAMESPACE}'
                     }
                 }
             }
