@@ -40,7 +40,8 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script { 
-                    
+                        sh 'kubectl config use-context kind-kind'
+
                         sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE} --validate=false'
                 
                 }
