@@ -4,6 +4,7 @@ pipeline {
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
         KUBE_NAMESPACE = 'default'
         DEPLOYMENT_YAML = 'deployment.yaml'
+        KUBECONFIG = '/home/ahmed/.kube/config' 
     }
     stages {
         // Checkout code from GitHub repositories
