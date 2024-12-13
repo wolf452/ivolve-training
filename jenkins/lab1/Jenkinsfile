@@ -52,7 +52,7 @@ pipeline {
             steps {
                 script {
                     // Using Secret text, write it to a temporary kubeconfig file
-                    withCredentials([string(credentialsId: 'k8s_login', variable: 'K8S_CONFIG')]) {
+                    withCredentials([string(credentialsId: 'k8s_loginn.txt', variable: 'K8S_CONFIG')]) {
                         writeFile file: 'kubeconfig', text: "${K8S_CONFIG}"
                         sh "kubectl --kubeconfig=kubeconfig apply -f $DEPLOYMENT_YAML"
                     }
