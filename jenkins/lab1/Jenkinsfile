@@ -46,10 +46,10 @@ pipeline {
                         sh 'kubectl config set-credentials jenkins --token=${K8S_TOKEN}' 
 
                         // Set the context (adjust the cluster name if necessary)
-                        sh 'kubectl config set-context my-context --user=jenkins --cluster=kind-kind'  # Set Kubernetes context
+                        sh 'kubectl config set-context my-context --user=jenkins --cluster=kind-kind'  
 
                         // Use the context
-                        sh 'kubectl config use-context my-context'  # Use the specified context
+                        sh 'kubectl config use-context my-context'  
                     }
                 }
             }
