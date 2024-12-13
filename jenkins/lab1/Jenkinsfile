@@ -51,7 +51,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'k8s_logion', variable: 'k8s_login')]) {
+                    withKubeConfig([credentialsId: 'kubeconfig-file']) {
                         // Set the K8s config with the token
                         sh "kubectl config set-credentials jenkins --token=${k8s_login}"
                         sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
