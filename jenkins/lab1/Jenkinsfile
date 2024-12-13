@@ -41,8 +41,8 @@ pipeline {
             steps {
                 script { 
                     
-                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE}'
-                    
+                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE} --validate=false'
+                
                 }
             }
         }
