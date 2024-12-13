@@ -40,7 +40,7 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script {
-                      kubectl apply -f /jenkins/lab1/jenkins/lab1/deployment.yaml -n ${KUBE_NAMESPACE}'
+                    sh 'kubectl apply -f /jenkins/lab1/jenkins/lab1/deployment.yaml -n ${KUBE_NAMESPACE}'
                     }
                 }
             }
