@@ -2,7 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
-        KUBE_NAMESPACE = 'default'  // You can customize the Kubernetes Namespace
+        KUBE_NAMESPACE = 'default' 
+        DEPLOYMENT_YAML = 'deployment.yaml'
     }
     stages {
         // Checkout code from GitHub repositories
@@ -19,7 +20,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t docker.io/ahmedmaher07/ivolve .'  // Build Docker image
+                    sh 'docker build -t docker.io/ahmedmaher07/ivolve .'  
                 }
             }
         }
@@ -29,25 +30,46 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  // Login to Docker Hub
-                        sh 'docker push ${DOCKER_IMAGE}'  // Push Docker image to Docker Hub
+                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
+                        sh 'docker push ${DOCKER_IMAGE}'  
                     }
                 }
             }
         }
 
-        // Login to Kubernetes Cluster
-        stage('Login to Kubernetes') {
+        stage('Edit Deployment.yaml') {
             steps {
-                script { 
-                        sh 'kubectl config use-context minikube'
-
-                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE}'
-                
+                script {
+                    // Use sed to replace the image name in the deployment.yaml file
+                    sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
         }
-
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
+                    // Apply the updated deployment.yaml to Kubernetes
+                    sh "kubectl apply -f $stage('Edit Deployment.yaml') {
+            steps {
+                script {
+                    // Use sed to replace the image name in the deployment.yaml file
+                    sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
+                }
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
+                    // Apply the updated deployment.yaml to Kubernetes
+                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                }
+            }
+        } -n $KUBE_NAMESPACE"
+                }
+            }
+        }
         // Post action (e.g., notifications, additional tasks)
         stage('Post Action') {
             steps {
