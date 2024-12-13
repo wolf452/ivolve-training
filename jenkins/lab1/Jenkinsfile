@@ -40,9 +40,9 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script { 
-                        sh 'kubectl config use-context kind-kind'
+                        sh 'kubectl config use-context minikube'
 
-                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE} --validate=false'
+                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE}'
                 
                 }
             }
