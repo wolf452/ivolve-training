@@ -41,7 +41,7 @@ pipeline {
             steps {
                 script { 
                     
-                        sh 'kubectl apply -f /jenkins/lab1/jenkins/lab1/deployment.yaml -n ${KUBE_NAMESPACE}'
+                        sh 'kubectl apply -f deployment.yaml -n ${KUBE_NAMESPACE}'
                     
                 }
             }
