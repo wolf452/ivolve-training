@@ -32,7 +32,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
-                      //  sh 'docker push ${DOCKER_IMAGE}'  
+                     //   sh 'docker push ${DOCKER_IMAGE}'  
                     }
                 }
             }
@@ -53,13 +53,8 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8s_token']) {
-                        // تأكد من أن Jenkins يملك الأذونات اللازمة للوصول إلى Kubernetes
-                        sh """
-                            kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE \
-                            --client-cert=/home/ahmed/.minikube/profiles/minikube/client.crt \
-                            --client-key=/home/ahmed/.minikube/profiles/minikube/client.key \
-                            --certificate-authority=/home/ahmed/.minikube/ca.crt
-                        """
+                        // لا حاجة لتمرير الشهادات في الأمر هنا
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
