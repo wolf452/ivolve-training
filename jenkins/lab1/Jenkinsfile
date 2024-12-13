@@ -2,9 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
-        KUBE_NAMESPACE = 'default' 
+        KUBE_NAMESPACE = 'default'
         DEPLOYMENT_YAML = 'deployment.yaml'
-        K8S_LOGIN = credentials('k8s_login')
     }
     stages {
         // Checkout code from GitHub repositories
@@ -52,7 +51,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                  sh "kubectl --kubeconfig=${K8S_LOGIN} apply -f deployment.yaml"
+                    // Assuming that K8S_LOGIN is a kubeconfig file stored as Jenkins credentials
+                    withCredentials([file(credentialsId: 'k8s_login', variable: 'KUBECONFIG')]) {
+                        sh "kubectl --kubeconfig=${KUBECONFIG} apply -f $DEPLOYMENT_YAML"
                     }
                 }
             }
