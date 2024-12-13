@@ -15,7 +15,7 @@ pipeline {
                 }
             }
         }
-        
+
         // Build Docker image from Dockerfile
         stage('Build Docker Image') {
             steps {
@@ -24,7 +24,7 @@ pipeline {
                 }
             }
         }
-        
+
         // Push Docker image to Docker Hub
         stage('Push Docker Image') {
             steps {
@@ -51,9 +51,10 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Assuming that K8S_LOGIN is a kubeconfig file stored as Jenkins credentials
-                    withCredentials([file(credentialsId: 'k8s_login', variable: 'KUBECONFIG')]) {
-                        sh "kubectl --kubeconfig=${KUBECONFIG} apply -f $DEPLOYMENT_YAML"
+                    // Using Secret text, write it to a temporary kubeconfig file
+                    withCredentials([string(credentialsId: 'k8s_login', variable: 'K8S_CONFIG')]) {
+                        writeFile file: 'kubeconfig', text: "${K8S_CONFIG}"
+                        sh "kubectl --kubeconfig=kubeconfig apply -f $DEPLOYMENT_YAML"
                     }
                 }
             }
