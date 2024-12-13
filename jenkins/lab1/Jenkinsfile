@@ -33,7 +33,8 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
-                     //   sh 'docker push ${DOCKER_IMAGE}'  
+                        // Uncomment the following line to push the image
+                        // sh 'docker push ${DOCKER_IMAGE}'  
                     }
                 }
             }
@@ -53,9 +54,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'k8s_token']) {
-                        // لا حاجة لتمرير الشهادات في الأمر هنا
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                    withCredentials([file(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
+                        // تأكد من أن KUBECONFIG يشير إلى kubeconfig الصحيح
+                        sh "kubectl --kubeconfig=$KUBECONFIG apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
