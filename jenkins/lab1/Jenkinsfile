@@ -40,9 +40,9 @@ pipeline {
         stage('Login to Kubernetes') {
             steps {
                 script { 
-                    withEnv(["KUBECONFIG=${env.HOME}/.kube/config"]) {
+                    
                         sh 'kubectl apply -f /jenkins/lab1/jenkins/lab1/deployment.yaml -n ${KUBE_NAMESPACE}'
-                    }
+                    
                 }
             }
         }
