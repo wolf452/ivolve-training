@@ -20,7 +20,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t docker.io/ahmedmaher07/ivolve .'  
+                    // تأكد من أنك في المسار الصحيح للـ Dockerfile
+                    sh 'docker build -t $DOCKER_IMAGE .'  
                 }
             }
         }
@@ -41,7 +42,7 @@ pipeline {
         stage('Edit Deployment.yaml') {
             steps {
                 script {
-                    // Use sed to replace the image name in the deployment.yaml file
+                    // استخدام sed لتحديث اسم الصورة في ملف deployment.yaml
                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
@@ -51,10 +52,9 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Using Secret text, write it to a temporary kubeconfig file
-                    withCredentials([string(credentialsId: 'k8s_loginn', variable: 'K8S_CONFIG')]) {
-                        writeFile file: 'kubeconfig', text: "${K8S_CONFIG}"
-                        sh "kubectl --kubeconfig=kubeconfig apply -f $DEPLOYMENT_YAML"
+                    withKubeConfig([credentialsId: 'k8s_login']) {
+                        // تطبيق التغييرات على Kubernetes باستخدام kubectl
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
                 }
             }
