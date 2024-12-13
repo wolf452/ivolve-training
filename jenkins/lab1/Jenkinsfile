@@ -20,7 +20,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     sh   'docker build -t docker.io/ahmedmaher07/ivolve .'
+                     sh   'docker build -t docker.io/ahmedmaher07/ivolve .'  // Build Docker image
                 }
             }
         }
@@ -30,8 +30,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
-                        sh 'docker push ${DOCKER_IMAGE}'
+                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  // Login to Docker Hub
+                        sh 'docker push ${DOCKER_IMAGE}'  // Push Docker image to Docker Hub
                     }
                 }
             }
@@ -42,8 +42,14 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
-                        sh 'echo "${K8S_TOKEN}" | kubectl login --token=${K8S_TOKEN} --server=https://127.0.0.1:45907'
-                        sh 'kubectl config use-context my-context'
+                        // Set the credentials with the Kubernetes token
+                        sh 'kubectl config set-credentials jenkins --token=${K8S_TOKEN}' 
+
+                        // Set the context (adjust the cluster name if necessary)
+                        sh 'kubectl config set-context my-context --user=jenkins --cluster=kind-kind'  # Set Kubernetes context
+
+                        // Use the context
+                        sh 'kubectl config use-context my-context'  # Use the specified context
                     }
                 }
             }
@@ -53,7 +59,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "kubectl apply -f ${DEPLOYMENT_YAML} -n ${KUBE_NAMESPACE}"
+                    sh "kubectl apply -f ${DEPLOYMENT_YAML} -n ${KUBE_NAMESPACE}"  // Deploy to Kubernetes
                 }
             }
         }
