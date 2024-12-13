@@ -37,6 +37,7 @@ pipeline {
             }
         }
 
+        // Edit Deployment.yaml
         stage('Edit Deployment.yaml') {
             steps {
                 script {
@@ -45,31 +46,20 @@ pipeline {
                 }
             }
         }
+
+        // Deploy to Kubernetes
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                    // Apply the updated deployment.yaml to Kubernetes
-                    sh "kubectl apply -f $stage('Edit Deployment.yaml') {
-            steps {
-                script {
-                    // Use sed to replace the image name in the deployment.yaml file
-                    sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
+                    withCredentials([string(credentialsId: 'k8s_logion', variable: 'k8s_login')]) {
+                        // Set the K8s config with the token
+                        sh "kubectl config set-credentials jenkins --token=${k8s_login}"
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                    }
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'k8s_login', usernameVariable: 'kind_USERNAME', passwordVariable: 'kind_PASSWORD')]) {
-                    // Apply the updated deployment.yaml to Kubernetes
-                    sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
-                }
-            }
-        } -n $KUBE_NAMESPACE"
-                }
-            }
-        }
+
         // Post action (e.g., notifications, additional tasks)
         stage('Post Action') {
             steps {
