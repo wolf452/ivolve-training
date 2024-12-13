@@ -39,10 +39,12 @@ pipeline {
         // Login to Kubernetes Cluster
         stage('Login to Kubernetes') {
             steps {
-                script {
+                script { 
+                    withEnv(["KUBECONFIG= ~/.kube/config"]) {
                     sh 'kubectl apply -f /jenkins/lab1/jenkins/lab1/deployment.yaml -n ${KUBE_NAMESPACE}'
-                }
-            }
+                  }
+              }
+           }
         }
 
         // Post action (e.g., notifications, additional tasks)
