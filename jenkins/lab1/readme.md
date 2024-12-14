@@ -175,8 +175,10 @@ Manage Jenkins >> Credentials >> Add Credentials
 ### Check the Jenkins file in the git repo and other related files the run the build
 Verify the Execution of the Pipeline
 kubectl get deployments
-image
+![deploy](https://github.com/user-attachments/assets/abcb5403-e3d8-40c1-aab2-190d74ed3106)
+
 ### Finish
+
 ![finish2](https://github.com/user-attachments/assets/89773c32-3719-49dc-b133-7bfd8dae70cf)
 ![finish](https://github.com/user-attachments/assets/08752853-1da4-474f-9bf8-c9681f4fc352)
 
