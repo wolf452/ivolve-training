@@ -21,10 +21,10 @@ pipeline {
             steps {
                 script {
                     // استخدام الـ Token كـ Credential للنشر
-                    withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'new_k8s_token')]) {
                         // استخدام token من الـ Jenkins credentials للنشر
                         sh """
-                        kubectl --token=$K8S_TOKEN apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
+                        kubectl --token=$new_k8s_token apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
                         """
                     }
                 }
