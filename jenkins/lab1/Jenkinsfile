@@ -54,7 +54,7 @@ pipeline {
                         // Check if kubeconfig is properly set
                         sh 'kubectl config view'
                         // Apply the deployment
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        sh " kubectl apply -f deployment.yaml -n default --user=jenkins"
                     }
                 }
             }
