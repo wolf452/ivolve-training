@@ -42,16 +42,7 @@ pipeline {
             }
         }
 
-        // Edit Deployment.yaml
-        stage('Edit Deployment.yaml') {
-            steps {
-                script {
-                    // استخدام sed لتحديث اسم الصورة في ملف deployment.yaml
-                    // sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
-                }
-            }
-        }
-
+        
         // Deploy to Kubernetes
         stage('Deploy to Kubernetes') {
             steps {
