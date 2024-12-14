@@ -6,7 +6,6 @@ pipeline {
         DEPLOYMENT_YAML = 'deployment.yaml'
     }
     stages {
-        // Checkout code from GitHub repositories
         stage('Checkout') {
             steps {
                 script {
@@ -18,39 +17,28 @@ pipeline {
             }
         }
 
-        
-
-        // Push Docker image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'  
-                        // Uncomment the following line to push the image
-                        // sh 'docker push ${DOCKER_IMAGE}'  
+                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
                     }
                 }
             }
         }
 
-       
-
-        // Deploy to Kubernetes
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Use KUBECONFIG credentials (FileCredentials)
-                    withCredentials([file(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
-                        // Make sure KUBECONFIG points to the correct kubeconfig file
-                        sh 'export KUBECONFIG=$KUBECONFIG'
-                        // Apply the deployment
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  --user=jenkins"
+                    // Use Secret Text for kubeconfig (as text instead of a file)
+                    withCredentials([string(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
+                        sh 'export KUBECONFIG=$KUBECONFIG'  // Set the token as environment variable
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE --user=jenkins"
                     }
                 }
             }
         }
 
-        // Post action (e.g., notifications, additional tasks)
         stage('Post Action') {
             steps {
                 script {
