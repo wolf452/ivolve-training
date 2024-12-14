@@ -149,11 +149,7 @@ Replace the placeholders (like your-image-name, docker-credentials-id, etc.) wit
 Make sure the Kubernetes token and Docker credentials are correctly set in Jenkins.
 ![cerditi](https://github.com/user-attachments/assets/b04eb22d-e1ae-4697-a2c9-1bc674099a41)
 
-### Finish
 
-![fininsh](https://github.com/user-attachments/assets/f0e2e418-f9dc-42d7-ae46-90980e6a6165)
-![load](https://github.com/user-attachments/assets/5ee924c2-6646-457d-968c-fd034c486ed3)
-![finish2](https://github.com/user-attachments/assets/8605d4ea-4fe9-46f4-aaaf-1aa7b98449c1)
 
 Benefits of Shared Libraries
 By implementing shared libraries in Jenkins:
