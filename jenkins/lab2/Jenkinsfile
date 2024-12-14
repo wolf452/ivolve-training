@@ -11,7 +11,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
+                    // استدعاء المكتبات المشتركة من المسار داخل المستودع
                     gitLib.checkoutRepository('https://github.com/IbrahimAdell/Lab.git', 'main')
+                    dir ('jenkins/lab2/shared-library-name/vars')
                     gitLib.checkoutRepository('https://github.com/wolf8534/ivolve-.git', 'main', 'jenkins/lab2')
                 }
             }
