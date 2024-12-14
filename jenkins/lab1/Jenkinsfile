@@ -30,9 +30,19 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Use Secret Text for kubeconfig (as text instead of a file)
-                    withCredentials([string(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
-                      sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE --user=jenkins --validate=false"
+                 withCredentials([string(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
+                        // تعيين الـ token للمستخدم jenkins
+                        sh 'kubectl config set-credentials jenkins --token=$KUBECONFIG'
+
+                        // تعيين عنوان الـ API server
+                        sh 'kubectl config set-cluster minikube --server=//https://192.168.49.2:8443
+'
+
+                       
+                        sh 'kubectl config use-context minikube'
+
+                        // تطبيق الـ deployment
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
 
                     }
                 }
