@@ -18,15 +18,7 @@ pipeline {
             }
         }
 
-        // Build Docker image from Dockerfile
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // تأكد من أنك في المسار الصحيح للـ Dockerfile
-                    // sh 'docker build -t $DOCKER_IMAGE .'  
-                }
-            }
-        }
+        
 
         // Push Docker image to Docker Hub
         stage('Push Docker Image') {
