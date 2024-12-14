@@ -23,8 +23,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
                         // تعيين المتغير كبيئة بدلاً من تمريره كـ flag
                         sh """
-                        export KUBERNETES_TOKEN=\$K8S_TOKEN
-                        kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
+                           export KUBERNETES_TOKEN=${K8S_TOKEN}
+                           kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE --token=${K8S_TOKEN}
                         """
                     }
                 }
