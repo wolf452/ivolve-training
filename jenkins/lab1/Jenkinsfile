@@ -10,9 +10,11 @@ pipeline {
         // Checkout code from GitHub repositories
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
-                dir('jenkins/lab1') {
-                    git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
+                script {
+                    git url: 'https://github.com/IbrahimAdell/Lab.git', branch: 'main'
+                    dir('jenkins/lab1') {
+                        git url: 'https://github.com/wolf8534/ivolve-.git', branch: 'main'
+                    }
                 }
             }
         }
@@ -58,7 +60,9 @@ pipeline {
                     withCredentials([file(credentialsId: 'k8s_token', variable: 'KUBECONFIG')]) {
                         // Make sure KUBECONFIG points to the correct kubeconfig file
                         sh 'export KUBECONFIG=$KUBECONFIG'
-                        sh 'kubectl config set-credentials jenkins --token=$KUBECONFIG'
+                        
+                        sh 'kubectl config set-credentials jenkins --token=KUBECONFIG'
+                        
                         // Apply the deployment
                         sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
                     }
