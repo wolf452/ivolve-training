@@ -23,7 +23,8 @@ pipeline {
                     // استخدام الـ Token كـ Credential للنشر
                     withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
                         sh """
-                        kubectl --token=${K8S_TOKEN} apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
+                        export KUBERNETES_TOKEN=${K8S_TOKEN}
+                        kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE --token=${K8S_TOKEN}
                         """
                     }
                 }
