@@ -61,7 +61,7 @@ pipeline {
                         // Make sure KUBECONFIG points to the correct kubeconfig file
                         sh 'export KUBECONFIG=$KUBECONFIG'
                         // Apply the deployment
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE"
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -u jenkins -n $KUBE_NAMESPACE"
                     }
                 }
             }
