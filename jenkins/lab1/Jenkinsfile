@@ -33,7 +33,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: 'k8s_token']) {
                         // تطبيق الـ deployment
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  --user=minikube"
+                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  "
 
 
                     }
