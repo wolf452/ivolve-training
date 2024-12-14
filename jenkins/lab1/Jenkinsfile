@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        KUBE_CONFIG = credentials('k8s_token')
         DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
         KUBE_NAMESPACE = 'default'
         DEPLOYMENT_YAML = 'deployment.yaml'
@@ -18,24 +17,16 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
-                    }
-                }
-            }
-        }
+       
 
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withKubeConfig([string(credentialsId: 'k8s_token')]) {
-                        // تطبيق الـ deployment
-                        sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  "
-
-
+                    // استخدام الـ Token كـ Credential للنشر
+                    withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
+                        sh """
+                        kubectl --token=$K8S_TOKEN apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
+                        """
                     }
                 }
             }
