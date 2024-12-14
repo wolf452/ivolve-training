@@ -1,5 +1,5 @@
-def buildImage(String imageName, String dockerfilePath = ".") {
-    sh "docker build -t ${imageName} ${dockerfilePath}"
+def buildImage(String imageName) {
+    sh "docker build -t ${imageName} ."
 }
 
 def pushImage(String imageName, String credentialsId) {
@@ -9,8 +9,4 @@ def pushImage(String imageName, String credentialsId) {
         docker push ${imageName}
         """
     }
-}
-
-def removeLocalImage(String imageName) {
-    sh "docker rmi ${imageName} || true"
 }
