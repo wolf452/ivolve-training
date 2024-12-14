@@ -35,6 +35,7 @@ pipeline {
                         // تطبيق الـ deployment
                         sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  --user=jenkins"
 
+
                     }
                 }
             }
