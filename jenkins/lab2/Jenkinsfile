@@ -1,0 +1,69 @@
+@Library('shared-library-name') _
+
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve'
+        KUBE_NAMESPACE = 'default'
+        DEPLOYMENT_YAML = 'deployment.yaml'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    gitLib.checkoutRepository('https://github.com/IbrahimAdell/Lab.git', 'main')
+                    gitLib.checkoutRepository('https://github.com/wolf8534/ivolve-.git', 'main', 'jenkins/lab1')
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerLib.buildImage(env.DOCKER_IMAGE)
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    dockerLib.pushImage(env.DOCKER_IMAGE, 'Docker_hub')
+                }
+            }
+        }
+
+        stage('Edit Deployment.yaml') {
+            steps {
+                script {
+                    deploymentLib.editDeploymentYaml(env.DEPLOYMENT_YAML, env.DOCKER_IMAGE)
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    kubernetesLib.deployToKubernetes('/home/jenkins/.kube/config', env.K8S_TOKEN, env.DEPLOYMENT_YAML, env.KUBE_NAMESPACE)
+                }
+            }
+        }
+
+        stage('Post Action') {
+            steps {
+                script {
+                    echo "Deployment to Kubernetes completed successfully!"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline executed successfully."
+        }
+        failure {
+            echo "Pipeline failed."
+        }
+    }
+}
