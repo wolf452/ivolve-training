@@ -31,7 +31,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'k8s_token']) {
+                    withKubeConfig([string(credentialsId: 'k8s_token')]) {
                         // تطبيق الـ deployment
                         sh "kubectl apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE  "
 
