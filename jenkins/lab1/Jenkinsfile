@@ -23,8 +23,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
                         // تخزين الـ token في ملف مؤقت
                         sh """
-                        sh 'kubectl --token=$K8S_TOKEN get nodes'
                         echo \$K8S_TOKEN > /tmp/k8s_token
+                        kubectl --token=\$(cat /tmp/k8s_token) get nodes
                         kubectl --token=\$(cat /tmp/k8s_token) apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
                         """
                     }
