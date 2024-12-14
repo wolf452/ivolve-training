@@ -61,8 +61,10 @@ Ensure the following folder structure for your shared library:
 
 jenkins/lab2/shared-library-name/ ├── vars/ │ ├── deploymentLib.groovy │ ├── dockerLib.groovy │ ├── gitLib.groovy │ └── kubernetesLib.groovy
 
-python
-Copy code
+### Finish
+![fininsh](https://github.com/user-attachments/assets/67392d54-5cab-4474-8db4-2cc9aad5033d)
+![load](https://github.com/user-attachments/assets/e734986a-7036-48ff-925e-c6d14d9c2707)
+![finish2](https://github.com/user-attachments/assets/7dc0fffa-1578-4167-b9f7-1784dc23c98c)
 
 ### 6. Example Usage
 
