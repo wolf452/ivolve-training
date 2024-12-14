@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     // استخدام sed لتحديث اسم الصورة في ملف deployment.yaml
-                     sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
+                   //  sh "sed -i 's|image:.*|image: $DOCKER_IMAGE|g' $DEPLOYMENT_YAML"
                 }
             }
         }
