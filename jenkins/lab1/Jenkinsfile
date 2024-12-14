@@ -35,7 +35,7 @@ pipeline {
                         sh 'kubectl config set-credentials jenkins --token=$KUBECONFIG'
 
                         // تعيين عنوان الـ API server
-                        sh 'kubectl config set-cluster minikube --server=//https://192.168.49.2:8443
+                        sh 'kubectl config set-cluster minikube --server=https://192.168.49.2:8443
 '
 
                        
