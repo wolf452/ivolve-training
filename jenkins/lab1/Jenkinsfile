@@ -17,14 +17,25 @@ pipeline {
             }
         }
 
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
+                        sh "docker build -t ${DOCKER_IMAGE} ."
+                        sh "docker push ${DOCKER_IMAGE}"
+                    }
+                }
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // استخدام الـ Token كـ Credential للنشر
-                    withCredentials([string(credentialsId: 'new_k8s_token')]) {
-                        // استخدام token من الـ Jenkins credentials للنشر
+                    withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
                         sh """
-                        kubectl --token=$new_k8s_token apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
+                        kubectl --token=$K8S_TOKEN apply -f $DEPLOYMENT_YAML -n $KUBE_NAMESPACE
                         """
                     }
                 }
