@@ -30,7 +30,7 @@ Install ngrok on the machine where Jenkins is running. To do this, run:
 bash
 Copy code
 sudo apt install ngrok
-3. Run ngrok
+### 3. Run ngrok
 Start ngrok to create a public endpoint that will forward traffic to Jenkins (default port 8080):
 
 bash
