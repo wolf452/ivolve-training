@@ -26,5 +26,5 @@ To create the necessary namespaces in your Kubernetes cluster for different envi
 kubectl create namespace dev
 kubectl create namespace test
 kubectl create namespace prod
-` ``` `
-## 3.**mdfkdmfkd
+-
+### 3. mdfkdmfkd
