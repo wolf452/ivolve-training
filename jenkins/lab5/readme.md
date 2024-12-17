@@ -160,7 +160,7 @@ kubectl version --client
 ![main-proddeplo](https://github.com/user-attachments/assets/86bcb69c-ab43-4fbf-9376-55afcc2b6436)
 
 - second 
-    namespace  
+    namespace  dev
 ![finish-secondbranch](https://github.com/user-attachments/assets/38930166-a2ab-4c68-8fac-5e4080f2383c)
 ![deploy-dev](https://github.com/user-attachments/assets/cbd1f068-f546-47cb-b404-7cd567066bf3)
 
