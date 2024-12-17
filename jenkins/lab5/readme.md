@@ -153,3 +153,23 @@ Verify the Kubectl installation:
 
 kubectl version --client
 ```
+# Finish
+- main
+   namespace prod
+![mainfin](https://github.com/user-attachments/assets/60026c14-f8c0-4623-8793-98e023ca0d59)
+![main-proddeplo](https://github.com/user-attachments/assets/86bcb69c-ab43-4fbf-9376-55afcc2b6436)
+
+- second 
+    namespace  
+![finish-secondbranch](https://github.com/user-attachments/assets/38930166-a2ab-4c68-8fac-5e4080f2383c)
+![deploy-dev](https://github.com/user-attachments/assets/cbd1f068-f546-47cb-b404-7cd567066bf3)
+
+-third
+   namespace test
+![out-test](https://github.com/user-attachments/assets/88a93f60-8810-48fe-9c39-85d9732d8c99)
+
+![third-testdelop](https://github.com/user-attachments/assets/c50aa41d-7ffb-4669-b06a-108b2828ef4c)
+
+
+
+
