@@ -89,6 +89,8 @@ Once the ServiceAccount is created, you can get the token associated with it for
 
 ```bash
 kubectl get secret $(kubectl get serviceaccount my-service-account -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 --decode
+or 
+kubectl create token service-account -n namespace
 ```
 This command retrieves the token for the ServiceAccount my-service-account.
 
