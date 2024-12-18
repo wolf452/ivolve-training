@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+spec:
+  podSelector:
+    matchLabels:
+      app: static-website
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+
