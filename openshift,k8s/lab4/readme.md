@@ -16,10 +16,6 @@ To create a ServiceAccount, run:
 kubectl create serviceaccount my-service-account
 ```
 
-إذا كنت تقصد استبدال "Service Account" بـ "ServiceAccount" أو "ServiceAccount" في بعض الأماكن داخل الـ README.md، إليك الملف المعدل بناءً على طلبك:
-
-markdown
-Copy code
 # OpenShift Security and RBAC
 
 ## Overview
