@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-red-pod
+spec:
+  tolerations:
+    - key: "color"
+      operator: "Equal"
+      value: "red"
+      effect: "NoSchedule"
+  containers:
+    - name: nginx
+      image: nginx
+
