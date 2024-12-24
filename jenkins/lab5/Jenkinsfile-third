@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // بناء الصورة باستخدام Docker
-                    sh 'docker build . -f Dockerfile -t docker.io/ahmedmaher07/doc:v0'
+                    sh 'docker build . -f Dockerfile -t docker.io/ahmedmaher07/doc:v3'
                 }
             }
         }
