@@ -11,12 +11,11 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // استدعاء مستودع IbrahimAdell/Lab.git
+                    
                     gitLib.checkoutRepository('https://github.com/IbrahimAdell/Lab.git', 'main')
 
-                    // العمل في المسار المحدد
                     dir('jenkins/lab2/shared-library-name/vars') {
-                        // استدعاء مستودع wolf8534/ivolve-.git في المسار المحدد
+                      
                         gitLib.checkoutRepository('https://github.com/wolf8534/ivolve-.git', 'main')
                     }
                 }
