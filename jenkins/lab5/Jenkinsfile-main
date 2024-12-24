@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'jenkins-slave' }
     environment {
-        DOCKER_IMAGE = 'docker.io/ahmedmaher07/ivolve:v5'
+        DOCKER_IMAGE = 'docker.io/ahmedmaher07/doc:v0'
         KUBE_NAMESPACE = 'prod'
         DEPLOYMENT_YAML = 'deployment.yaml'
     }
@@ -12,9 +12,29 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // بناء الصورة باستخدام Docker
+                    sh 'docker build . -f Dockerfile -t docker.io/ahmedmaher07/doc:v0'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // استخدام بيانات الاعتماد لتسجيل الدخول ودفع الصورة
+                    withCredentials([usernamePassword(credentialsId: 'Docker_hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login docker.io -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                        sh 'docker push docker.io/ahmedmaher07/doc:v0'
+                    }
+                }
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
-                
                 withCredentials([string(credentialsId: 'k8s_token', variable: 'K8S_TOKEN')]) {
                     sh """
                     kubectl create namespace $KUBE_NAMESPACE || true
@@ -33,7 +53,6 @@ pipeline {
 
     post {
         success {
-            
             echo "Pipeline executed successfully."
         }
         failure {
