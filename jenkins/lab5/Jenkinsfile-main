@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'jenkins-slave' }
     environment {
-        DOCKER_IMAGE = 'docker.io/ahmedmaher07/doc:v0'
+        DOCKER_IMAGE = 'docker.io/ahmedmaher07/doc:v1'
         KUBE_NAMESPACE = 'prod'
         DEPLOYMENT_YAML = 'deployment.yaml'
     }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // بناء الصورة باستخدام Docker
-                    sh 'docker build . -f Dockerfile -t docker.io/ahmedmaher07/doc:v0'
+                    sh 'docker build . -f Dockerfile -t docker.io/ahmedmaher07/doc:v1'
                 }
             }
         }
