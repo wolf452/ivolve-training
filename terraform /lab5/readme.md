@@ -1,6 +1,7 @@
 # Terraform Infrastructure
 
 This repository contains the Terraform configuration for deploying a VPC with EC2 instances and Load Balancers in AWS.
+![load](https://github.com/user-attachments/assets/1cedf34c-c92e-4d2b-9451-3af73539fc41)
 
 ## Modules
 
